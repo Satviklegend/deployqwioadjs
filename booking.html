@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Appointment | Acentrik Technology Solutions LLC</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.booking-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 40px; margin-top: 48px; align-items: start; }
+@media (max-width: 860px) { .booking-layout { grid-template-columns: 1fr; } }
+
+/* CALENDAR PANEL */
+.cal-panel { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; overflow: hidden; }
+.cal-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border2); }
+.cal-month { font-family: 'Space Grotesk',sans-serif; font-size: 16px; font-weight: 600; color: var(--white); }
+.cal-nav { display: flex; gap: 8px; }
+.cal-btn { width: 32px; height: 32px; border-radius: 7px; border: 1px solid var(--border2); background: none; color: var(--muted); cursor: pointer; font-size: 14px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.cal-btn:hover { border-color: var(--border); color: var(--white); background: var(--card2); }
+.cal-grid { padding: 16px; }
+.cal-days-head { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 6px; }
+.cal-days-head span { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted); padding: 6px 0; letter-spacing: 0.5px; }
+.cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+.cal-day {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+  color: var(--muted); border: 1px solid transparent;
+}
+.cal-day:hover:not(.empty):not(.past) { background: var(--card2); border-color: var(--border2); color: var(--white); }
+.cal-day.available { color: var(--text); }
+.cal-day.selected { background: linear-gradient(135deg, var(--accent), #0284c7); color: white; border-color: transparent; font-weight: 600; }
+.cal-day.today { border-color: var(--accent); color: var(--accent2); font-weight: 600; }
+.cal-day.past { opacity: 0.3; cursor: not-allowed; }
+.cal-day.empty { cursor: default; }
+
+/* TIME SLOTS */
+.time-section { padding: 0 16px 16px; border-top: 1px solid var(--border2); margin-top: 8px; }
+.time-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin: 16px 0 12px; }
+.time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.time-slot {
+  padding: 10px 6px; text-align: center; border-radius: 8px;
+  border: 1px solid var(--border2); cursor: pointer; font-size: 12px; font-weight: 500;
+  color: var(--muted); transition: all 0.2s; background: var(--bg3);
+}
+.time-slot:hover:not(.unavail) { border-color: var(--border); color: var(--white); background: var(--card2); }
+.time-slot.selected { background: linear-gradient(135deg, var(--accent), #0284c7); color: white; border-color: transparent; }
+.time-slot.unavail { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+
+/* BOOKING FORM */
+.booking-form-panel { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 36px 32px; }
+.booking-form-panel h3 { font-family: 'Space Grotesk',sans-serif; font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+.booking-form-panel .booking-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.selected-summary { background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; padding: 16px; margin-bottom: 22px; display: flex; gap: 20px; flex-wrap: wrap; }
+.summary-item { display: flex; align-items: center; gap: 8px; }
+.summary-item .s-ico { font-size: 16px; }
+.summary-item p { font-size: 13px; color: var(--muted); }
+.summary-item strong { display: block; font-size: 14px; color: var(--white); font-weight: 600; }
+
+/* STEP INDICATOR */
+.steps { display: flex; align-items: center; gap: 0; margin-bottom: 32px; }
+.step-item { display: flex; align-items: center; gap: 8px; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--muted); transition: all 0.2s; }
+.step-num.active { border-color: var(--accent); color: var(--accent); background: rgba(14,165,233,0.1); }
+.step-num.done { border-color: var(--accent); background: var(--accent); color: white; }
+.step-label { font-size: 12px; font-weight: 600; color: var(--muted); }
+.step-label.active { color: var(--accent2); }
+.step-line { flex: 1; height: 1px; background: var(--border2); margin: 0 12px; min-width: 24px; }
+
+/* CONFIRMATION */
+.confirm-box { display: none; text-align: center; padding: 40px 20px; }
+.confirm-icon { font-size: 56px; margin-bottom: 20px; }
+.confirm-box h3 { font-family: 'Space Grotesk',sans-serif; font-size: 26px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+.confirm-box p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 28px; }
+
+/* SIDEBAR INFO */
+.booking-sidebar { display: flex; flex-direction: column; gap: 20px; }
+.info-card { background: var(--bg3); border: 1px solid var(--border2); border-radius: 12px; padding: 22px 20px; }
+.info-card h4 { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+.info-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-row .ico { font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+.info-row p { font-size: 14px; color: var(--text); line-height: 1.5; }
+.info-row a { color: var(--accent2); text-decoration: none; }
+.info-row a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">AT</div>
+    <span class="logo-text">Acentrik <span>Tech</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="booking.html" class="nav-cta active" style="background:var(--accent);">Book Appointment</a>
+</nav>
+
+<div class="page-hero" style="padding:72px 5% 60px;">
+  <div class="page-hero-inner">
+    <div class="pill">Free Consultation Available</div>
+    <h1 class="h1">Book an <span class="grad">Appointment</span></h1>
+    <p class="sub">Select a service, pick a date and time, and submit your details. Our team will confirm your appointment and reach out within 24 hours.</p>
+  </div>
+</div>
+
+<section class="section" style="padding-top:48px;">
+  <div class="section-inner">
+    <div class="booking-layout">
+
+      <!-- LEFT: CALENDAR + TIME -->
+      <div class="booking-sidebar">
+        <div class="cal-panel">
+          <div class="cal-header">
+            <span class="cal-month" id="cal-month-label">April 2026</span>
+            <div class="cal-nav">
+              <button class="cal-btn" onclick="changeMonth(-1)">‹</button>
+              <button class="cal-btn" onclick="changeMonth(1)">›</button>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-days-head">
+              <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div class="cal-days" id="cal-days"></div>
+          </div>
+          <div class="time-section">
+            <div class="time-label">Available Times</div>
+            <div class="time-slots" id="time-slots">
+              <div class="time-slot" onclick="selectTime(this,'9:00 AM')">9:00 AM</div>
+              <div class="time-slot" onclick="selectTime(this,'9:30 AM')">9:30 AM</div>
+              <div class="time-slot" onclick="selectTime(this,'10:00 AM')">10:00 AM</div>
+              <div class="time-slot" onclick="selectTime(this,'10:30 AM')">10:30 AM</div>
+              <div class="time-slot" onclick="selectTime(this,'11:00 AM')">11:00 AM</div>
+              <div class="time-slot unavail" >11:30 AM</div>
+              <div class="time-slot" onclick="selectTime(this,'1:00 PM')">1:00 PM</div>
+              <div class="time-slot" onclick="selectTime(this,'1:30 PM')">1:30 PM</div>
+              <div class="time-slot" onclick="selectTime(this,'2:00 PM')">2:00 PM</div>
+              <div class="time-slot unavail">2:30 PM</div>
+              <div class="time-slot" onclick="selectTime(this,'3:00 PM')">3:00 PM</div>
+              <div class="time-slot" onclick="selectTime(this,'3:30 PM')">3:30 PM</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h4>Contact Us Directly</h4>
+          <div class="info-row"><span class="ico">📞</span><p><a href="tel:+14696704364">+1 (469) 670-4364</a></p></div>
+          <div class="info-row"><span class="ico">✉️</span><p><a href="mailto:hr@acentriktech.com">hr@acentriktech.com</a></p></div>
+          <div class="info-row"><span class="ico">📍</span><p>4425 W Airport Fwy, Suite 207<br>Irving, TX 75062</p></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: FORM -->
+      <div class="booking-form-panel">
+        <div id="form-view">
+          <h3>Complete Your Booking</h3>
+          <p class="booking-sub">Fill in your details below — we'll confirm your appointment by email within 24 hours.</p>
+
+          <div class="selected-summary">
+            <div class="summary-item"><span class="s-ico">📅</span><div><p>Date Selected</p><strong id="summary-date">Choose a date →</strong></div></div>
+            <div class="summary-item"><span class="s-ico">🕐</span><div><p>Time Selected</p><strong id="summary-time">Choose a time →</strong></div></div>
+          </div>
+
+          <div class="form-group">
+            <label>Service Type</label>
+            <select id="service-type">
+              <option value="">Select a service...</option>
+              <option>Product Development</option>
+              <option>Application Development & Support</option>
+              <option>Intelligent Operations (AI/ML)</option>
+              <option>DevOps Engineering</option>
+              <option>Test Automation</option>
+              <option>Help Desk Services</option>
+              <option>IT Consulting</option>
+              <option>Application Modernization</option>
+              <option>General Inquiry / Other</option>
+            </select>
+          </div>
+
+          <div class="form-row2">
+            <div class="form-group"><label>First Name</label><input type="text" id="first-name" placeholder="John"></div>
+            <div class="form-group"><label>Last Name</label><input type="text" id="last-name" placeholder="Smith"></div>
+          </div>
+          <div class="form-row2">
+            <div class="form-group"><label>Email Address</label><input type="email" id="email" placeholder="john@company.com"></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="+1 (469) 000-0000"></div>
+          </div>
+          <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" id="company" placeholder="Your company or organization (optional)">
+          </div>
+          <div class="form-group">
+            <label>Message / Project Brief</label>
+            <textarea id="message" placeholder="Tell us briefly about your project, current challenges, or what you'd like to discuss during the consultation..."></textarea>
+          </div>
+          <button class="sub-btn" onclick="submitBooking()">📅 Confirm Appointment →</button>
+          <div class="success-msg" id="success-msg">✅ Your appointment request has been submitted! We'll confirm via email within 24 hours.</div>
+        </div>
+
+        <div class="confirm-box" id="confirm-view">
+          <div class="confirm-icon">🎉</div>
+          <h3>Appointment Requested!</h3>
+          <p>Thank you! Your consultation request has been received. Our team will review your booking and send a confirmation to your email within 24 hours.</p>
+          <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-bottom:24px;text-align:left;">
+            <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Booking Summary</div>
+            <div id="confirm-details" style="display:flex;flex-direction:column;gap:10px;"></div>
+          </div>
+          <a href="index.html" class="btn btn-s" style="display:inline-flex;">← Back to Home</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band" style="padding:64px 5%;">
+  <h2>Prefer to Call Us?</h2>
+  <p>Speak directly with our team — we're happy to discuss your needs over the phone.</p>
+  <a href="tel:+14696704364" class="btn btn-p">📞 +1 (469) 670-4364</a>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo"><div class="logo-icon">AT</div><span class="logo-text">Acentrik <span>Tech</span></span></a>
+      <p>Global IT services provider and digital transformation partner delivering value, flexibility, and excellence worldwide.</p>
+    </div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="services.html">Services</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="services.html">Product Development</a></li><li><a href="services.html">App Development</a></li><li><a href="services.html">Intelligent Ops</a></li><li><a href="services.html">DevOps</a></li><li><a href="services.html">IT Consulting</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4>
+      <div class="footer-ci"><span class="i">📍</span><p>4425 W Airport Fwy, Suite 207<br>Irving, TX 75062</p></div>
+      <div class="footer-ci"><span class="i">📞</span><p><a href="tel:+14696704364">+1 (469) 670-4364</a></p></div>
+      <div class="footer-ci"><span class="i">✉️</span><p><a href="mailto:hr@acentriktech.com">hr@acentriktech.com</a></p></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Acentrik Technology Solutions LLC. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+let selectedDate = null, selectedTime = null;
+let currentYear = 2026, currentMonth = 3; // April (0-indexed)
+
+const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function renderCalendar() {
+  document.getElementById('cal-month-label').textContent = monthNames[currentMonth] + ' ' + currentYear;
+  const container = document.getElementById('cal-days');
+  container.innerHTML = '';
+  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const today = new Date();
+
+  for (let i = 0; i < firstDay; i++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day empty';
+    container.appendChild(el);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el = document.createElement('div');
+    const date = new Date(currentYear, currentMonth, d);
+    const isToday = date.toDateString() === today.toDateString();
+    const isPast = date < today && !isToday;
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    el.textContent = d;
+    el.className = 'cal-day' + (isPast ? ' past' : isWeekend ? ' past' : ' available') + (isToday ? ' today' : '');
+    if (!isPast && !isWeekend) {
+      el.onclick = () => selectDate(el, d);
+    }
+    container.appendChild(el);
+  }
+}
+
+function changeMonth(dir) {
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+}
+
+function selectDate(el, day) {
+  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  const dateStr = monthNames[currentMonth] + ' ' + day + ', ' + currentYear;
+  selectedDate = dateStr;
+  document.getElementById('summary-date').textContent = dateStr;
+}
+
+function selectTime(el, time) {
+  document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTime = time;
+  document.getElementById('summary-time').textContent = time;
+}
+
+function submitBooking() {
+  const service = document.getElementById('service-type').value;
+  const firstName = document.getElementById('first-name').value.trim();
+  const lastName = document.getElementById('last-name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const message = document.getElementById('message').value.trim();
+
+  if (!selectedDate) { alert('Please select a date.'); return; }
+  if (!selectedTime) { alert('Please select a time.'); return; }
+  if (!service) { alert('Please select a service.'); return; }
+  if (!firstName || !lastName) { alert('Please enter your full name.'); return; }
+  if (!email) { alert('Please enter your email address.'); return; }
+
+  // Build mailto as fallback (in production, replace with EmailJS or Formspree)
+  const subject = encodeURIComponent('Appointment Request — ' + service);
+  const body = encodeURIComponent(
+    'New Appointment Request\n\n' +
+    'Name: ' + firstName + ' ' + lastName + '\n' +
+    'Email: ' + email + '\n' +
+    'Phone: ' + (phone || 'N/A') + '\n' +
+    'Company: ' + (company || 'N/A') + '\n\n' +
+    'Service: ' + service + '\n' +
+    'Date: ' + selectedDate + '\n' +
+    'Time: ' + selectedTime + '\n\n' +
+    'Message:\n' + (message || 'N/A')
+  );
+
+  // Show confirmation view
+  document.getElementById('form-view').style.display = 'none';
+  const cv = document.getElementById('confirm-view');
+  cv.style.display = 'block';
+
+  const details = [
+    { ico: '👤', label: 'Name', val: firstName + ' ' + lastName },
+    { ico: '📧', label: 'Email', val: email },
+    { ico: '🛠️', label: 'Service', val: service },
+    { ico: '📅', label: 'Date', val: selectedDate },
+    { ico: '🕐', label: 'Time', val: selectedTime },
+  ];
+  const dd = document.getElementById('confirm-details');
+  dd.innerHTML = details.map(d =>
+    `<div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span>${d.ico}</span><span style="color:var(--muted);">${d.label}:</span><strong style="color:var(--white);">${d.val}</strong></div>`
+  ).join('');
+
+  // Open mailto as fallback email
+  setTimeout(() => {
+    window.location.href = 'mailto:hr@acentriktech.com?subject=' + subject + '&body=' + body;
+  }, 800);
+}
+
+renderCalendar();
+</script>
+</body>
+</html>

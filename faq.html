@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ | Acentrik Technology Solutions LLC</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.faq-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 56px; margin-top: 52px; align-items: start; }
+@media (max-width: 800px) { .faq-layout { grid-template-columns: 1fr; } }
+.faq-nav { background: var(--card); border: 1px solid var(--border2); border-radius: 14px; padding: 24px; position: sticky; top: 90px; }
+.faq-nav h4 { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.faq-nav-item { display: block; padding: 10px 14px; border-radius: 8px; font-size: 14px; color: var(--muted); text-decoration: none; cursor: pointer; transition: all 0.2s; margin-bottom: 4px; }
+.faq-nav-item:hover, .faq-nav-item.active { background: var(--glow); color: var(--accent2); }
+.faq-section-group { margin-bottom: 52px; }
+.faq-section-title { font-family: 'Space Grotesk',sans-serif; font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border2); display: flex; align-items: center; gap: 10px; }
+.faq-item { border: 1px solid var(--border2); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+.faq-item:hover { border-color: rgba(14,165,233,0.25); }
+.faq-q { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; cursor: pointer; }
+.faq-q-text { font-size: 15px; font-weight: 500; color: var(--text); }
+.faq-icon { width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 16px; flex-shrink: 0; transition: transform 0.3s, background 0.2s; }
+.faq-item.open .faq-icon { transform: rotate(45deg); background: var(--glow); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-item.open .faq-a { max-height: 300px; }
+.faq-a-inner { padding: 0 20px 18px; font-size: 14px; color: var(--muted); line-height: 1.75; border-top: 1px solid var(--border2); padding-top: 16px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">AT</div>
+    <span class="logo-text">Acentrik <span>Tech</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="faq.html" class="active">FAQ</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="booking.html" class="nav-cta">Book Appointment</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="pill">Frequently Asked Questions</div>
+    <h1 class="h1">Got <span class="grad">Questions?</span></h1>
+    <p class="sub">Everything you need to know about Acentrik Technology Solutions and our services. Can't find your answer? <a href="contact.html" style="color:var(--accent2);">Contact us directly.</a></p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="faq-layout">
+      <div>
+        <div class="faq-nav">
+          <h4>Jump To</h4>
+          <a class="faq-nav-item active" href="#general">General</a>
+          <a class="faq-nav-item" href="#services">Services</a>
+          <a class="faq-nav-item" href="#process">Our Process</a>
+          <a class="faq-nav-item" href="#consulting">IT Consulting</a>
+          <a class="faq-nav-item" href="#engagement">Engagement</a>
+        </div>
+      </div>
+
+      <div>
+        <!-- GENERAL -->
+        <div class="faq-section-group" id="general">
+          <div class="faq-section-title">🏢 General</div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">What is Acentrik Technology Solutions LLC?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Acentrik Technology Solutions LLC is a global IT consulting services company based in Irving, TX. We deliver advisory and professional managed services to enterprises and clients worldwide who are looking for value, flexibility, and excellent service. We are a digital transformation partner focused on providing cost-effective, integrated, responsive, and trustworthy IT solutions.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Where is Acentrik Technology Solutions located?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Our offices are located at 4425 W Airport Fwy, Suite 207, Irving, TX 75062. You can reach us by phone at +1 (469) 670-4364 or by email at hr@acentriktech.com. While we're based in the Dallas-Fort Worth area, we serve clients globally.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">What industries do you serve?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">We serve enterprises across a wide range of industries including financial services, retail, healthcare, manufacturing, logistics, and technology companies. Our techno-functional experts bring industry-specific knowledge along with deep technology expertise to every engagement.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Do you work with small businesses or only large enterprises?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">We work with organizations of all sizes — from growing small and medium businesses to large enterprises. Our flexible service model allows us to tailor our engagement to the scale and budget of your organization while delivering the same high-quality expertise.</div></div>
+          </div>
+        </div>
+
+        <!-- SERVICES -->
+        <div class="faq-section-group" id="services">
+          <div class="faq-section-title">🛠️ Services</div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">What core services does Acentrik offer?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Our core services include: Product Development, Application Development & Support, Intelligent Operations (AI/ML/Data Analytics), DevOps Engineering, Test Automation, and Help Desk Services. We also offer IT Consulting and Application Modernization services for enterprise clients.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">What technologies do your consultants specialize in?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Our consultants specialize in Java, .NET, C#, Database Management, Data Engineering, Data Science, Oracle, Salesforce, Software Development & IT Operations, Mulesoft, and other middleware services. We stay current with the latest technologies to deliver cutting-edge solutions.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Can you help with legacy system modernization?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Absolutely. Application Modernization is one of our key offerings. We help enterprise organizations transform legacy processes into flexible, modular application development portfolios by implementing next-generation processes defined by speed, efficiency, and resilience. We use an agile approach to enhance digital transformation while keeping pace with competition.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Do you provide ongoing support after project delivery?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Yes. Our Application Development & Support service includes ongoing post-deployment support. We also offer dedicated Help Desk services for unparalleled 24/7 support, ensuring your operations remain smooth and uninterrupted after go-live.</div></div>
+          </div>
+        </div>
+
+        <!-- PROCESS -->
+        <div class="faq-section-group" id="process">
+          <div class="faq-section-title">⚙️ Our Process</div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">What does the engagement process look like?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Our process starts with a Discovery phase where we assess your challenges, objectives, and technology landscape. We then move to Strategy (designing the right solution architecture), Execution (implementing with best practices and full transparency), and finally ongoing Support and continuous improvement post-deployment.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">How do you ensure project quality?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">We follow best industry practices and implement comprehensive Test Automation solutions to ensure quality and reliability. Our teams use continuous testing integration, regression testing, and performance testing throughout the development lifecycle to catch issues early and accelerate time-to-market.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Do you follow Agile methodologies?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Yes. We adopt an agile approach to application development to enhance digital transformation efficiently while keeping pace with the competition. Agile enables us to deliver iterative value, respond to changing requirements, and maintain positive customer experiences throughout the engagement.</div></div>
+          </div>
+        </div>
+
+        <!-- CONSULTING -->
+        <div class="faq-section-group" id="consulting">
+          <div class="faq-section-title">💡 IT Consulting</div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">What does your IT consulting service include?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Our IT consulting covers regular technology planning, IT budgeting, planned upgrades, technical design, best-practice guidance, and access to Technology Design Architects. We simplify complexity between ideation, technology, and execution, aligning your IT strategy with your business and process strategies.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Can you help us create an IT budget and roadmap?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Yes. IT Budgeting and strategic technology planning are core components of our consulting service. Our consultants provide strategic business and technical guidance to help you allocate resources effectively, plan for upgrades, and create a technology roadmap aligned with your business goals.</div></div>
+          </div>
+        </div>
+
+        <!-- ENGAGEMENT -->
+        <div class="faq-section-group" id="engagement">
+          <div class="faq-section-title">🤝 Engagement & Booking</div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">How do I get started with Acentrik?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">The easiest way to get started is to book a free consultation using our appointment booking tool on this site. Alternatively, call us at +1 (469) 670-4364 or email hr@acentriktech.com. Our team will schedule an initial discovery session to understand your needs and recommend the right services.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Is the initial consultation free?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">Yes! We offer a free initial consultation so we can understand your business challenges and discuss how Acentrik can help. Book your free session through our appointment booking page or contact us directly.</div></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+              <span class="faq-q-text">What engagement models do you offer?</span>
+              <div class="faq-icon">+</div>
+            </div>
+            <div class="faq-a"><div class="faq-a-inner">We offer flexible engagement models including project-based engagements, time-and-materials, and long-term managed services contracts. We tailor our engagement model to fit your specific needs, budget, and timeline — whether you need a short-term advisory engagement or a long-term technology partnership.</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <h2>Still Have Questions?</h2>
+  <p>Our team is ready to answer any questions and help you find the right IT solution for your business.</p>
+  <div class="btn-row" style="justify-content:center;">
+    <a href="booking.html" class="btn btn-p">📅 Book Free Consultation</a>
+    <a href="contact.html" class="btn btn-s">Contact Us →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo"><div class="logo-icon">AT</div><span class="logo-text">Acentrik <span>Tech</span></span></a>
+      <p>Global IT services provider and digital transformation partner delivering value, flexibility, and excellence worldwide.</p>
+    </div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="services.html">Services</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li><li><a href="booking.html">Book Appointment</a></li></ul></div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="services.html">Product Development</a></li><li><a href="services.html">App Development</a></li><li><a href="services.html">Intelligent Ops</a></li><li><a href="services.html">DevOps</a></li><li><a href="services.html">IT Consulting</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4>
+      <div class="footer-ci"><span class="i">📍</span><p>4425 W Airport Fwy, Suite 207<br>Irving, TX 75062</p></div>
+      <div class="footer-ci"><span class="i">📞</span><p><a href="tel:+14696704364">+1 (469) 670-4364</a></p></div>
+      <div class="footer-ci"><span class="i">✉️</span><p><a href="mailto:hr@acentriktech.com">hr@acentriktech.com</a></p></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Acentrik Technology Solutions LLC. All rights reserved.</span>
+  </div>
+</footer>
+<script>
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>
